@@ -6,6 +6,10 @@ A sleek, dark-themed chatbot powered by **Google Gemini AI** with a Flask backen
 ![Flask](https://img.shields.io/badge/Flask-3.x-000000?logo=flask)
 ![Gemini](https://img.shields.io/badge/Gemini-2.5--flash-4285F4?logo=google)
 
+<p align="center">
+  <img src="static/preview.png" alt="Gemini Chatbot Preview" width="600" />
+</p>
+
 ## ✨ Features
 
 - **Context-aware conversations** — chat history is maintained per session
