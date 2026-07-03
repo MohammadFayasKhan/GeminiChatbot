@@ -168,33 +168,7 @@ This prompt combines **five** prompting techniques:
 - **Produces organized output** — decomposition ensures file-by-file planning
 - **Gives you a runnable result** — closing instructions prevent code dumps without guidance
 
-> 📖 **Full guide with tips and a prompting reference table:** [PROMPT_ENGINEERING.md](PROMPT_ENGINEERING.md)
-
-## 🌐 Deployment (Render.com)
-
-Since this app requires a Flask backend to keep your API key secure, it cannot be hosted directly on static platforms like GitHub Pages. Instead, you can deploy it for free on **Render** using your GitHub repository.
-
-### Step-by-Step Deployment Guide:
-
-1. **Sign up / Log in** to [Render.com](https://render.com/).
-2. Click the **"New +"** button in the dashboard and select **"Web Service"**.
-3. Connect your GitHub account and select your **`GeminiChatbot`** repository.
-4. Set the following configuration settings:
-   - **Name:** `gemini-chatbot` (or any custom name)
-   - **Region:** Choose the region closest to you
-   - **Branch:** `main`
-   - **Runtime:** `Python 3`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app`
-5. Click **"Advanced"** to add your Environment Variable:
-   - Click **"Add Environment Variable"**
-   - **Key:** `GEMINI_API_KEY`
-   - **Value:** Paste your actual Gemini API key (`AIzaSy...`)
-6. Choose the **Free Instance Type** and click **"Create Web Service"**.
-
-Render will build and deploy your project automatically. Once completed, they will provide a live public URL (e.g., `https://gemini-chatbot.onrender.com`).
-
----
+> 📖 **Full guide with tips and a prompting reference table:** [PROMPT.md](PROMPT.md)
 
 ## 📝 License
 
