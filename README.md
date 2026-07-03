@@ -109,6 +109,8 @@ This project was built using an AI coding assistant with a structured prompt. Fu
 ### The Prompt Used
 
 ```
+You are a senior full-stack developer experienced in building lightweight, production-ready demo applications with clean, well-commented code and secure API key handling.
+
 Create a simple web-based chatbot application that uses the Gemini API to answer user queries.
 
 ## Project Requirements
@@ -153,24 +155,74 @@ Create a simple web-based chatbot application that uses the Gemini API to answer
 Please generate all the necessary files, and after creating them, explain how to run the app locally.
 ```
 
-### Prompt Type: Structured / Specification Prompting
+---
 
-This prompt combines **five** prompting techniques:
+## Detailed Prompting Technique Mapping
 
-| Technique | How It's Used |
-|-----------|--------------|
-| **Structured/Specification** | Detailed spec with sections: tech stack, functionality, file structure |
-| **Constraint-Based** | "vanilla JS, no framework," "don't hardcode the key," "Flask not Django" |
-| **Decomposition** | Numbered sub-tasks (UI, backend, errors, session) |
-| **Output Format** | Exact file names specified (`app.py`, `templates/index.html`, etc.) |
-| **Closing Instruction** | "explain how to run the app locally" ensures runnable output |
+### 1. Overview Table
 
-### Why These Techniques Work for Coding
+| Technique | Used in This Prompt? | Why |
+|---|---|---|
+| **Zero-Shot Prompting** | ✅ Yes (primary technique) | Task is a well-known coding pattern (Flask + API + HTML); no need to teach a pattern via examples |
+| **6-Component Structured Prompting** | ✅ Yes (Role, Task, Context, Format, Constraints) | Compensates for the absence of examples with maximum specification depth |
+| **Few-Shot Prompting** | ❌ No | No input/output pairs needed — code scaffolding isn't a classification/labeling task where output format wobbles |
+| **Chain-of-Thought (CoT)** | ❌ No | Not a multi-step reasoning/math/logic problem the model needs to "work through" — it's direct generation |
+| **Decomposition** (CoT-adjacent principle) | ✅ Yes (borrowed principle) | Numbered functionality list breaks one large task into independently solvable sub-tasks |
+| **Negative Constraints** | ✅ Yes | "No framework," "don't hardcode the key" — prevents common failure modes proactively |
 
-- **Removes ambiguity** — the AI knows exactly what "done" looks like
-- **Prevents unwanted choices** — constraints stop the AI from picking React or exposing API keys
-- **Produces organized output** — decomposition ensures file-by-file planning
-- **Gives you a runnable result** — closing instructions prevent code dumps without guidance
+---
+
+### 2. Why Each Technique Was Chosen
+
+**Zero-Shot Prompting**
+Per Day 9's framework, zero-shot works well when the model has "seen millions of similar tasks in pre-training." A Flask + Gemini API chatbot is an extremely common tutorial-style pattern — the model doesn't need to be shown what one looks like, just told the specific requirements. Using few-shot here would waste tokens showing code examples the model can already generate correctly from instructions alone.
+
+**6-Component Structuring (Role, Task, Context, Format, Constraints)**
+Day 9 notes that when output goes wrong, the fix is usually a missing component from this list — not switching techniques entirely. Since Examples were deliberately skipped, the other five components were made maximally explicit to compensate:
+- **Role** primes code style and judgment ("senior full-stack developer" → clean, secure, production-minded code)
+- **Task** removes ambiguity about what's being built
+- **Context** (tech stack) prevents the model from guessing frameworks
+- **Format** (exact file names/structure) guarantees a predictable, usable output
+- **Constraints** (negative constraints) block specific failure modes before they happen — e.g., a hardcoded API key
+
+**Decomposition**
+Even without invoking Chain-of-Thought, the principle behind it — breaking a hard problem into a chain of easy ones — was applied manually by numbering the 5 functionality requirements. This reduces the chance of the model missing a requirement or conflating two features into one, the same failure mode CoT prevents in reasoning tasks.
+
+**Why NOT Chain-of-Thought**
+Day 11 is explicit: CoT is for tasks with a "reasoning gap" — math, logic, debugging, multi-step analysis — where the model would otherwise guess. Generating boilerplate Flask code isn't that; there's no leap to bridge, so adding "think step by step" would only burn tokens for zero accuracy gain (Day 11, Slide 10 — *"If the task is already a single easy step... stepping stones just cost extra tokens for zero gain"*).
+
+**Why NOT Few-Shot**
+Few-shot earns its cost when output format is inconsistent across runs — e.g., classification labels, JSON schemas. A code-generation task with an explicit file structure and explicit constraints already achieves that consistency through Format + Constraints, making examples redundant here.
+
+---
+
+### 3. General Use Cases (Beyond This Project)
+
+| Technique | Best Used For | Skip When |
+|---|---|---|
+| **Zero-shot** | Sentiment analysis, simple extraction, translation, well-known code patterns, general Q&A | Task needs a specific/niche output format or label set |
+| **Few-shot** | Custom classification labels, strict JSON schemas, matching a specific writing style, extraction with unusual fields | Task is common enough the model already "knows" the shape |
+| **Zero-shot CoT** ("think step by step") | Math word problems, logic puzzles, multi-step debugging | Simple classification, fact lookups, single-step tasks |
+| **Few-shot CoT** | High-stakes domains needing a specific reasoning style (legal, medical, financial analysis) | You don't care about the exact reasoning format, only the answer |
+| **Self-consistency** (run N times, majority vote) | High-stakes single answers where being wrong is costly | Cost-sensitive or low-stakes tasks (N× the token cost) |
+| **Decomposition** (manual, not model-invoked) | Any large task — coding, writing, planning — broken into sub-tasks by the prompt author | Very small, atomic tasks with no natural sub-steps |
+
+---
+
+### 4. Escalation Ladder Position (Combined Day 9 + Day 11)
+
+```
+L1  Zero-shot            ← THIS PROMPT (heavily specified via 6-component structure)
+L2  Few-shot                (skipped — no format consistency issue)
+L3  Zero-shot CoT            (skipped — no reasoning gap)
+L4  Few-shot CoT
+L5  Self-consistency
+L6  Fine-tuning
+```
+
+This prompt deliberately stays at **L1**, but climbs the *specification* axis (Role/Task/Context/Format/Constraints) rather than the *reasoning* axis — which is the correct move per Day 9's rule of thumb: *"start zero-shot, wrong format → add examples, wrong reasoning → go chain-of-thought."* Since neither format drift nor reasoning failure was expected for this task, no escalation was needed.
+
+---
 
 > 📖 **Full guide with tips and a prompting reference table:** [PROMPT.md](PROMPT.md)
 
