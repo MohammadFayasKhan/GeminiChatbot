@@ -10,9 +10,7 @@ A sleek, dark-themed chatbot powered by **Google Gemini AI** with a Flask backen
   <img src="static/preview.png" alt="Gemini Chatbot Preview" width="600" />
 </p>
 
-<p align="center">
-  <a href="https://simpletgeminichatbot.vercel.app/" target="_blank"><strong>🚀 Live Demo on Vercel</strong></a>
-</p>
+> 🚀 **Live Demo:** [https://simpletgeminichatbot.vercel.app/](https://simpletgeminichatbot.vercel.app/)
 
 ## ✨ Features
 
@@ -32,7 +30,7 @@ chatBot/
 ├── .env                       # Gemini API key (not committed to Git)
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # This file
-├── PROMPT_ENGINEERING.md      # Prompt used to build this + learning guide
+├── PROMPT.md                  # Prompt used to build this + learning guide
 ├── templates/
 │   └── index.html             # Chat UI
 └── static/
@@ -104,7 +102,9 @@ The server will start at **http://127.0.0.1:5000**. Open that URL in your browse
 
 ## 🧠 Prompt Engineering – How This Was Built
 
-This project was built using an AI coding assistant with a carefully structured prompt. Full details are in [PROMPT_ENGINEERING.md](PROMPT_ENGINEERING.md), but here's a summary:
+This project was built using an AI coding assistant with a structured prompt. Full details of the prompting strategy are in [PROMPT.md](PROMPT.md).
+
+> 💡 **Prompt Engineering Learnings:** Read the complete breakdown of techniques like constraint-based and specification prompting in [PROMPT.md](PROMPT.md) to learn how to write robust coding prompts.
 
 ### The Prompt Used
 
