@@ -7,7 +7,7 @@ A sleek, dark-themed chatbot powered by **Google Gemini AI** with a Flask backen
 ![Gemini](https://img.shields.io/badge/Gemini-2.5--flash-4285F4?logo=google)
 
 <p align="center">
-  <img src="/Pic.png" alt="Gemini Chatbot Preview" width="600" />
+  <img src="static/preview.png" alt="Gemini Chatbot Preview" width="600" />
 </p>
 
 > 🚀 **Live Demo:** [https://simpletgeminichatbot.vercel.app/](https://simpletgeminichatbot.vercel.app/)
