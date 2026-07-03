@@ -10,6 +10,10 @@ A sleek, dark-themed chatbot powered by **Google Gemini AI** with a Flask backen
   <img src="static/preview.png" alt="Gemini Chatbot Preview" width="600" />
 </p>
 
+<p align="center">
+  <a href="https://simpletgeminichatbot.vercel.app/" target="_blank"><strong>🚀 Live Demo on Vercel</strong></a>
+</p>
+
 ## ✨ Features
 
 - **Context-aware conversations** — chat history is maintained per session
