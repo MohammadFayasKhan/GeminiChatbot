@@ -205,22 +205,9 @@ Few-shot earns its cost when output format is inconsistent across runs — e.g.,
 | **Self-consistency** (run N times, majority vote) | High-stakes single answers where being wrong is costly | Cost-sensitive or low-stakes tasks (N× the token cost) |
 | **Decomposition** (manual, not model-invoked) | Any large task — coding, writing, planning — broken into sub-tasks by the prompt author | Very small, atomic tasks with no natural sub-steps |
 
----
-
-### 4. Escalation Ladder Position (Combined Day 9 + Day 11)
-
-```
-L1  Zero-shot            ← THIS PROMPT (heavily specified via 6-component structure)
-L2  Few-shot                (skipped — no format consistency issue)
-L3  Zero-shot CoT            (skipped — no reasoning gap)
-L4  Few-shot CoT
-L5  Self-consistency
-L6  Fine-tuning
-```
-
-This prompt deliberately stays at **L1**, but climbs the *specification* axis (Role/Task/Context/Format/Constraints) rather than the *reasoning* axis — which is the correct move per Day 9's rule of thumb: *"start zero-shot, wrong format → add examples, wrong reasoning → go chain-of-thought."* Since neither format drift nor reasoning failure was expected for this task, no escalation was needed.
-
 > 📖 **Full guide with tips and a prompting reference table:** [PROMPT.md](PROMPT.md)
+
+---
 
 ## 📝 License
 
