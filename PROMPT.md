@@ -1,6 +1,6 @@
 # 🧠 Prompt Engineering – How This Project Was Built
 
-This document explains the **exact prompt** used to build this Gemini Chatbot using an AI coding assistant, the **type of prompting technique** used, and **why each technique matters** — structured as a learning resource.
+This document explains the **exact prompt** used to build this Gemini Chatbot using an AI coding assistant (Antigravity), the **type of prompting technique** used, and **why each technique matters** — written as a learning resource.
 
 ---
 
@@ -55,67 +55,87 @@ Please generate all the necessary files, and after creating them, explain how to
 
 ---
 
-## Detailed Prompting Technique Mapping
+## 🏷️ Primary Prompt Type: **Structured / Specification Prompting**
 
-### 1. Overview Table
+This is the main category — you give the AI a **detailed spec** (like a mini requirements document) rather than a vague ask. Instead of saying "build me a chatbot," the prompt breaks the request into explicit sections: tech stack, functionality, file structure, and code quality standards.
 
-| Technique | Used in This Prompt? | Why |
-|---|---|---|
-| **Zero-Shot Prompting** | ✅ Yes (primary technique) | Task is a well-known coding pattern (Flask + API + HTML); no need to teach a pattern via examples |
-| **6-Component Structured Prompting** | ✅ Yes (Role, Task, Context, Format, Constraints) | Compensates for the absence of examples with maximum specification depth |
-| **Few-Shot Prompting** | ❌ No | No input/output pairs needed — code scaffolding isn't a classification/labeling task where output format wobbles |
-| **Chain-of-Thought (CoT)** | ❌ No | Not a multi-step reasoning/math/logic problem the model needs to "work through" — it's direct generation |
-| **Decomposition** (CoT-adjacent principle) | ✅ Yes (borrowed principle) | Numbered functionality list breaks one large task into independently solvable sub-tasks |
-| **Negative Constraints** | ✅ Yes | "No framework," "don't hardcode the key" — prevents common failure modes proactively |
+**Why this works best for coding tasks:** It removes ambiguity about what "done" looks like. The AI knows exactly what files to create, what features to implement, and what quality bar to hit.
 
 ---
 
-### 2. Why Each Technique Was Chosen
+## 🔧 Secondary Techniques Layered In
 
-**Zero-Shot Prompting**
-Per Day 9's framework, zero-shot works well when the model has "seen millions of similar tasks in pre-training." A Flask + Gemini API chatbot is an extremely common tutorial-style pattern — the model doesn't need to be shown what one looks like, just told the specific requirements. Using few-shot here would waste tokens showing code examples the model can already generate correctly from instructions alone.
+### 1. Role/Context Framing (implicit)
 
-**6-Component Structuring (Role, Task, Context, Format, Constraints)**
-Day 9 notes that when output goes wrong, the fix is usually a missing component from this list — not switching techniques entirely. Since Examples were deliberately skipped, the other five components were made maximally explicit to compensate:
-- **Role** primes code style and judgment ("senior full-stack developer" → clean, secure, production-minded code)
-- **Task** removes ambiguity about what's being built
-- **Context** (tech stack) prevents the model from guessing frameworks
-- **Format** (exact file names/structure) guarantees a predictable, usable output
-- **Constraints** (negative constraints) block specific failure modes before they happen — e.g., a hardcoded API key
+The prompt implies "you are a developer building a production-ready mini-app" through the level of detail requested (error handling, environment variables, comments) — even without explicitly saying "act as a senior developer."
 
-**Decomposition**
-Even without invoking Chain-of-Thought, the principle behind it — breaking a hard problem into a chain of easy ones — was applied manually by numbering the 5 functionality requirements. This reduces the chance of the model missing a requirement or conflating two features into one, the same failure mode CoT prevents in reasoning tasks.
+**Why it matters:** Setting context helps the AI generate code that follows real-world best practices instead of toy examples.
 
-**Why NOT Chain-of-Thought**
-Day 11 is explicit: CoT is for tasks with a "reasoning gap" — math, logic, debugging, multi-step analysis — where the model would otherwise guess. Generating boilerplate Flask code isn't that; there's no leap to bridge, so adding "think step by step" would only burn tokens for zero accuracy gain (Day 11, Slide 10 — *"If the task is already a single easy step... stepping stones just cost extra tokens for zero gain"*).
+### 2. Constraint-Based Prompting
 
-**Why NOT Few-Shot**
-Few-shot earns its cost when output format is inconsistent across runs — e.g., classification labels, JSON schemas. A code-generation task with an explicit file structure and explicit constraints already achieves that consistency through Format + Constraints, making examples redundant here.
+The prompt specifies *boundaries*:
+- "vanilla JS, no framework"
+- "don't hardcode the API key"
+- "Flask, not Django"
+
+**Why it matters:** Without constraints, the AI might choose React, expose the API key in frontend code, or use a different backend framework. Constraints narrow the solution space to exactly what you want.
+
+### 3. Decomposition / Task Breakdown
+
+The request is split into numbered sub-tasks (UI, backend logic, error handling, session context) rather than one big paragraph. This is sometimes called **chain-of-tasks prompting**.
+
+**Why it matters:** It mirrors how a developer would break down the work. The AI can plan file-by-file instead of guessing priorities, producing more organized and complete output.
+
+### 4. Output Format Specification
+
+The prompt explicitly defines the deliverable structure with exact file names:
+- `app.py`
+- `templates/index.html`
+- `static/style.css`
+- `static/script.js`
+
+**Why it matters:** Without this, the AI might put everything in a single file or use different naming conventions. Specifying the output format ensures the project structure matches your expectations.
+
+### 5. Closing Instruction / Explicit Next-Step Direction
+
+The last line — *"explain how to run the app locally"* — tells the model what to do **after** generating code.
+
+**Why it matters:** This prevents the AI from just dumping files with no guidance. It ensures you get a runnable project, not just code snippets.
 
 ---
 
-### 3. General Use Cases (Beyond This Project)
+## 📊 Quick Reference: Prompting Techniques
 
-| Technique | Best Used For | Skip When |
-|---|---|---|
-| **Zero-shot** | Sentiment analysis, simple extraction, translation, well-known code patterns, general Q&A | Task needs a specific/niche output format or label set |
-| **Few-shot** | Custom classification labels, strict JSON schemas, matching a specific writing style, extraction with unusual fields | Task is common enough the model already "knows" the shape |
-| **Zero-shot CoT** ("think step by step") | Math word problems, logic puzzles, multi-step debugging | Simple classification, fact lookups, single-step tasks |
-| **Few-shot CoT** | High-stakes domains needing a specific reasoning style (legal, medical, financial analysis) | You don't care about the exact reasoning format, only the answer |
-| **Self-consistency** (run N times, majority vote) | High-stakes single answers where being wrong is costly | Cost-sensitive or low-stakes tasks (N× the token cost) |
-| **Decomposition** (manual, not model-invoked) | Any large task — coding, writing, planning — broken into sub-tasks by the prompt author | Very small, atomic tasks with no natural sub-steps |
+| If you want...                              | Use...                              |
+|---------------------------------------------|-------------------------------------|
+| A single clear deliverable (code, doc, app) | **Structured/Specification** prompting |
+| The AI to reason before answering           | **Chain-of-thought** prompting ("think step by step") |
+| Consistent style/format across outputs      | **Few-shot** prompting (show examples) |
+| The AI to behave a certain way throughout   | **Role** prompting ("act as...") |
+| Narrow, safe boundaries on output           | **Constraint-based** prompting |
 
 ---
 
-### 4. Escalation Ladder Position (Combined Day 9 + Day 11)
+## 💡 Tips for Writing Better Prompts
 
-```
-L1  Zero-shot            ← THIS PROMPT (heavily specified via 6-component structure)
-L2  Few-shot                (skipped — no format consistency issue)
-L3  Zero-shot CoT            (skipped — no reasoning gap)
-L4  Few-shot CoT
-L5  Self-consistency
-L6  Fine-tuning
-```
+1. **Be specific, not vague** — "build a chatbot with Flask backend and dark UI" beats "make me a chatbot"
+2. **Define the file structure upfront** — prevents the AI from organizing code differently than you expect
+3. **Include error handling requirements** — AIs often skip error handling unless explicitly asked
+4. **Specify what NOT to do** — "no framework," "don't hardcode keys" saves rework
+5. **End with a clear action** — "explain how to run it" or "write tests for it" gives the AI a clear stopping point
+6. **Never share API keys in prompts** — always use `.env` files and add them to `.gitignore`
 
-This prompt deliberately stays at **L1**, but climbs the *specification* axis (Role/Task/Context/Format/Constraints) rather than the *reasoning* axis — which is the correct move per Day 9's rule of thumb: *"start zero-shot, wrong format → add examples, wrong reasoning → go chain-of-thought."* Since neither format drift nor reasoning failure was expected for this task, no escalation was needed.
+---
+
+## 🔄 How to Iterate
+
+This prompt was the **first pass**. After the initial build, follow-up prompts were used to:
+- Migrate from the deprecated `google.generativeai` SDK to the new `google.genai` SDK
+- Switch models from `gemini-2.0-flash` to `gemini-2.5-flash` (due to quota limits)
+- Fix error handling that was confusing quota errors (429) with invalid key errors (401)
+
+This **iterative refinement** is itself a prompting technique — start with a comprehensive spec, then use short follow-up prompts to fix and polish.
+
+---
+
+*This project was built using [Antigravity](https://antigravity.dev), an AI coding assistant, as a learning exercise in prompt engineering and full-stack web development.*

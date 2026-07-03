@@ -155,8 +155,6 @@ Create a simple web-based chatbot application that uses the Gemini API to answer
 Please generate all the necessary files, and after creating them, explain how to run the app locally.
 ```
 
----
-
 ## Detailed Prompting Technique Mapping
 
 ### 1. Overview Table
@@ -221,8 +219,6 @@ L6  Fine-tuning
 ```
 
 This prompt deliberately stays at **L1**, but climbs the *specification* axis (Role/Task/Context/Format/Constraints) rather than the *reasoning* axis — which is the correct move per Day 9's rule of thumb: *"start zero-shot, wrong format → add examples, wrong reasoning → go chain-of-thought."* Since neither format drift nor reasoning failure was expected for this task, no escalation was needed.
-
----
 
 > 📖 **Full guide with tips and a prompting reference table:** [PROMPT.md](PROMPT.md)
 
