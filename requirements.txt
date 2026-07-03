@@ -1,4 +1,11 @@
-flask
+# Web Framework
+Flask
+
+# Load environment variables from .env
 python-dotenv
+
+# Google Gemini AI SDK
 google-genai
+
+# Production WSGI server
 gunicorn

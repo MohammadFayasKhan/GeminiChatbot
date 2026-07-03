@@ -1,7 +1,32 @@
 """
-Flask backend for the Gemini Chatbot.
-Handles API key security, session-based chat history,
-and proxies requests to the Google Gemini API.
+==============================================================================
+                                Gemini Chatbot
+==============================================================================
+
+Project      : Gemini Chatbot
+Description  : A modern AI-powered chatbot built using Flask and the
+               Google Gemini API, featuring a responsive and clean UI
+               for real-time conversational interactions.
+
+Author       : Mohammad Fayas Khan
+GitHub       : https://github.com/MohammadFayasKhan
+Repository   : https://github.com/MohammadFayasKhan/GeminiChatbot
+Version      : 1.0.0
+License      : MIT License
+
+Technologies :
+- HTML5
+- CSS3
+- JavaScript (ES6)
+- Python (Flask)
+- Google Gemini API
+
+Features :
+✓ Responsive modern interface
+✓ Real-time AI conversations
+✓ Clean and intuitive user experience
+✓ Conversation reset functionality
+✓ Mobile-friendly design
 """
 
 import os
